@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taskify • Premium Task Board</title>
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Custom stylesheet link -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Authentication Guard Redirect -->
+  <script>
+    if (!localStorage.getItem('token')) {
+      window.location.href = '/login.html';
+    }
+  </script>
+  <!-- Custom logic link -->
+  <script src="app.js" defer></script>
+</head>
+<body class="dark-theme">
+  <!-- Aurora Background Glows -->
+  <div class="aurora-glow glow-1"></div>
+  <div class="aurora-glow glow-2"></div>
+  
+  <div class="app-container">
+    
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand-section">
+        <div class="brand-logo">
+          <!-- Calendar Check Icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+            <polyline points="10 14 12 16 16 12"></polyline>
+          </svg>
+        </div>
+        <h1 class="brand-title">Taskify</h1>
+      </div>
+      
+      <div class="header-actions">
+        <!-- Keyboard shortcuts button -->
+        <button id="shortcuts-btn" class="btn-circle" title="Keyboard Shortcuts" aria-label="Keyboard Shortcuts">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+            <line x1="6" y1="8" x2="6" y2="8"></line>
+            <line x1="10" y1="8" x2="10" y2="8"></line>
+            <line x1="14" y1="8" x2="14" y2="8"></line>
+            <line x1="18" y1="8" x2="18" y2="8"></line>
+            <line x1="6" y1="12" x2="6" y2="12"></line>
+            <line x1="18" y1="12" x2="18" y2="12"></line>
+            <line x1="7" y1="16" x2="17" y2="16"></line>
+          </svg>
+        </button>
+        
+        <!-- Light / Dark theme switch button -->
+        <button id="theme-toggle" class="btn-circle" title="Toggle Theme" aria-label="Toggle Theme">
+          <!-- Moon Icon -->
+          <svg id="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <!-- Sun Icon -->
+          <svg id="sun-icon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+
+        <!-- Logout button -->
+        <button id="logout-btn" class="btn-circle" title="Log Out" aria-label="Log Out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Progress Panel -->
+    <section class="glass-panel stats-panel">
+      <div class="stats-progress-container">
+        <svg class="stats-progress-ring">
+          <defs>
+            <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#6366f1" />
+              <stop offset="50%" stop-color="#a855f7" />
+              <stop offset="100%" stop-color="#ec4899" />
+            </linearGradient>
+          </defs>
+          <circle class="stats-progress-ring-bg" cx="35" cy="35" r="32"></circle>
+          <circle class="stats-progress-ring-fill" id="progress-ring-fill" cx="35" cy="35" r="32"></circle>
+        </svg>
+        <span class="stats-progress-text" id="progress-percent">0%</span>
+      </div>
+
+      <div class="stats-metrics">
+        <div class="metric-card">
+          <span class="metric-value" id="stats-total">0</span>
+          <span class="metric-label">Total</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-value" id="stats-active">0</span>
+          <span class="metric-label">Active</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-value" id="stats-completed">0</span>
+          <span class="metric-label">Completed</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Task Creator Panel -->
+    <section class="glass-panel creator-panel">
+      <div class="creator-header" id="creator-header" title="Click to collapse/expand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span class="creator-header-title">Create a new task...</span>
+        <span class="creator-shortcut">N</span>
+      </div>
+
+      <form class="creator-drawer" id="creator-form" novalidate>
+        <div class="form-group">
+          <label for="task-title">Title *</label>
+          <input type="text" id="task-title" class="input-field" placeholder="What needs to be done?" required autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label for="task-desc">Description</label>
+          <textarea id="task-desc" class="input-field" placeholder="Add some extra details..." autocomplete="off"></textarea>
+        </div>
+
+        <div class="form-row-grid">
+          <div class="form-group">
+            <label for="task-date">Due Date</label>
+            <input type="date" id="task-date" class="input-field">
+          </div>
+
+          <div class="form-group">
+            <label>Priority</label>
+            <div class="priority-select-tabs" id="priority-selector">
+              <button type="button" class="priority-tab active" data-priority="low">Low</button>
+              <button type="button" class="priority-tab" data-priority="medium">Medium</button>
+              <button type="button" class="priority-tab" data-priority="high">High</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" id="btn-cancel-task" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Add Task
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Search & Filters Control Bar -->
+    <section class="glass-panel controls-panel">
+      <div class="search-row">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="search-bar" class="input-field search-input" placeholder="Search tasks by keyword... (Press '/' to focus)" autocomplete="off">
+        <button id="search-clear-btn" class="search-clear" title="Clear Search" style="display: none;">&times;</button>
+      </div>
+
+      <div class="filters-row">
+        <!-- Status filter buttons -->
+        <div class="status-filters" id="status-filter-group">
+          <button class="filter-btn active" data-status="all">All</button>
+          <button class="filter-btn" data-status="active">Active</button>
+          <button class="filter-btn" data-status="completed">Completed</button>
+        </div>
+
+        <!-- Dropdown selectors -->
+        <div class="select-controls">
+          <!-- Priority Filter -->
+          <div class="select-wrapper">
+            <select id="priority-filter-select" aria-label="Filter by priority">
+              <option value="all">All Priorities</option>
+              <option value="low">Low Priority</option>
+              <option value="medium">Medium Priority</option>
+              <option value="high">High Priority</option>
+            </select>
+          </div>
+
+          <!-- Sorting Selector -->
+          <div class="select-wrapper">
+            <select id="sort-select" aria-label="Sort tasks">
+              <option value="custom">Custom Order</option>
+              <option value="due-date">Due Date</option>
+              <option value="priority">Priority</option>
+              <option value="created-date">Creation Date</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Task List -->
+    <main class="task-list" id="task-list-container">
+      <!-- Cards will be dynamically injected here -->
+    </main>
+
+    <!-- Footer & Bulk Actions -->
+    <footer class="glass-panel footer-panel" id="footer-actions-panel">
+      <span id="tasks-left-counter">0 tasks remaining</span>
+      <button id="clear-completed-btn" class="clear-completed-btn" disabled>Clear Completed</button>
+    </footer>
+
+  </div>
+
+  <!-- Keyboard Shortcuts Modal Help -->
+  <div class="modal-overlay" id="shortcuts-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">Keyboard Shortcuts</h2>
+        <button class="modal-close" id="modal-close-btn" aria-label="Close shortcuts help">&times;</button>
+      </div>
+      <div class="shortcut-list">
+        <div class="shortcut-item">
+          <span>Focus Search Bar</span>
+          <div class="shortcut-keys">
+            <kbd>/</kbd> or <kbd>S</kbd>
+          </div>
+        </div>
+        <div class="shortcut-item">
+          <span>Open / Focus Add Form</span>
+          <div class="shortcut-keys">
+            <kbd>N</kbd>
+          </div>
+        </div>
+        <div class="shortcut-item">
+          <span>Cancel Add/Edit Form</span>
+          <div class="shortcut-keys">
+            <kbd>Esc</kbd>
+          </div>
+        </div>
+        <div class="shortcut-item">
+          <span>Quick Save Task</span>
+          <div class="shortcut-keys">
+            <kbd>Enter</kbd>
+          </div>
+        </div>
+        <div class="shortcut-item">
+          <span>Save Inline Edit</span>
+          <div class="shortcut-keys">
+            <kbd>Ctrl</kbd> + <kbd>Enter</kbd>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications Container -->
+  <div id="toast-container"></div>
+
+  <!-- Confetti Particle Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+</body>
+</html>
