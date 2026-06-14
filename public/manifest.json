@@ -1,0 +1,22 @@
+{
+  "short_name": "Taskify",
+  "name": "Taskify • Premium Task Board",
+  "description": "A modern, high-fidelity single-page Todo application with advanced task management, transitions, and local database syncing.",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/9062/9062976.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/9062/9062976.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/index.html",
+  "background_color": "#0b0f19",
+  "theme_color": "#6366f1",
+  "display": "standalone",
+  "orientation": "portrait"
+}
